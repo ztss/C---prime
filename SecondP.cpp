@@ -65,4 +65,35 @@
    下
    constexpr int sz=size();//当size是一个constexpr函数时，定义正确
    2.constexpr仅对指针有效，与指针所指的对象无关。即constexpr定义的指针就是常量指针。
-   3.constexpr声明中如果定义了一个指针，constexpr只对指针有效。即定义了一个常量指针
+   3.constexpr声明中如果定义了一个指针，constexpr只对指针有效。即定义了一个常量指针。
+2.5.1 类型别名
+   1.使用关键字typedef定义类型别名，也可以使用using定义类型的别名。
+   using SI=Sales_Item;//SI是Sales_Item类的别名
+   2.typedef char *pstring;
+     const pstring cstr=0;//cstr是指向char的常量指针
+     这里pstring是char*的别名，即pstring是指向char的指针
+     const char *cstr=0是对上面代码的错误解读，这条代码定义的是指向常量的指针。
+2.5.3 decltype类型指示符
+   1.希望从表达式的类型推断变量的类型，但是不用表达式的值初始化变量，这个时候可以用
+   decltype。decltype(f()) sum=x;这里sum的类型是函数f返回值的类型，但是编译器不会
+   实际调用f，只是给出f的类型并且给到sum,而sum的初始值应该是x。提示点：引用一定要初
+   始化。
+   2.decltype使用加了双层括号的变量，则会得到引用类型。如int i=42;decltype((i)) e;
+   这条语句是错误的，e这里是一个引用，必须初始化。即decltype((var))的结果永远是引用。
+2.6.3 编写自己的头文件
+   1.为了确保每个文件中类的定义是一致的，类通常定义在头文件中，而且类所在的头文件名字
+   应该和类一样。
+   2.确保头文件多次包含仍然能安全工作的常用技术是预处理器（preprocessor）。c++还会
+   用到的一种预处理功能是头文件保护符。头文件保护符的工作依赖与预处理变量。预处理变量
+   有两种状态：已定义和未定义。如下代码：
+   #ifndef SALES_DATA_H
+   #define SALES_DATA_H
+   #include<string>
+   struct Sales_data {
+
+   };
+   #endif
+   我们在源文件中如果第一次包含SALES_DATA_H这个头文件，那么就进入头文件，看到第一条
+   语句，因为之前没包含过，就没有定义，所以运行第二条，然后直到最后一条。这样这个头文
+   件就包含到我们的程序中了。当第二次包含的时候，运行头文件中第一条语句，发现定义过了
+   就为假，然后就直接到#endif了。不会再次包含。一般把预处理变量的名字全部大写。
