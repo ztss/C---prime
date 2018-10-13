@@ -65,4 +65,4 @@
    下
    constexpr int sz=size();//当size是一个constexpr函数时，定义正确
    2.constexpr仅对指针有效，与指针所指的对象无关。即constexpr定义的指针就是常量指针。
-   
+   3.constexpr声明中如果定义了一个指针，constexpr只对指针有效。即定义了一个常量指针
