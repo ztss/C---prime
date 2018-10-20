@@ -94,4 +94,8 @@
    或者string对象是常量，则只能使用const_iterator。而begin和end返回的具体类型由对象
    是否是常量决定。c++新添加了新特性，就是为了便于得到const_iterator类型。这就是cbegin
    和cend函数。
-   
+   5.对于一个有string组成的vector来说，要检查其元素是否为空，假设it是vector对象的迭代
+   器，那么语句就是(*it).empty(),而不能是*it.empty()。或者也可以用使用it->empty()。
+   6.warning:使用了迭代器的循环体，都不要向迭代器中所属的容器添加元素。就跟范围for循环
+   一样。
+ 
