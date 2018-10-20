@@ -76,3 +76,22 @@
    已经存在。否则如果通过下标访问了不存在元素，那么就会产生缓冲区溢出[buffer overflow]
    的严重的后果。而确保下标合法的一种有效手段就是使用范围for语句。
    5.vector以及string对象的下标运算符可以用于访问已存在的元素，而不能用于添加元素。
+3.4.1 使用迭代器
+   1.auto b=v.begin(),e=v.end();b,e都是迭代器，e是尾后迭代器（off-the-end iterator）
+   指向尾元素的下一位置。
+   2.*iter:返回迭代器iter所指元素的引用。
+   3.泛型编程：因为不是所有的标准库容器都定义了<运算符。但是所有的标准库容器都定义了
+   ==和!=，并且只有一部分标准库类型有下标运算符，所有我们可以经常使用迭代器以及!=，就
+   可以不用在意我们使用的是那种容器类型。比如：
+   string str="hello world!";
+	 for(auto iter=str.begin();iter!=str.end();iter++)
+	 {
+		 *iter=toupper(*iter);
+	 }
+   4.迭代器类型，一般使用iterator或者const_iterator来表示迭代器的类型。如
+   vector<int>::iterator it;
+   vector<int>::const_iterator it1;it1只能读元素，不能写元素。注意：如果vector对象
+   或者string对象是常量，则只能使用const_iterator。而begin和end返回的具体类型由对象
+   是否是常量决定。c++新添加了新特性，就是为了便于得到const_iterator类型。这就是cbegin
+   和cend函数。
+   
