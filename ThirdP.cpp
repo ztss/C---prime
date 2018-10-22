@@ -104,3 +104,16 @@
    2.auto mid=vi.begin()+vi.size()/2;//返回vi中间元素的迭代器。
    3.两个迭代器相减就是返回两个迭代器之间的距离。可以为负值，其返回的类型是difference_
    type。
+3.5.1 定义初始化内置数组
+   1.数组不允许拷贝和赋值，一些编译器支持数组的赋值，就是所谓的编译器扩展(compiler ex
+   tension)。但是一般不要用这种特性。
+   2.数组本身是对象，所以允许定义数组的指针和引用。
+   int (*Parray)[10]=&arr;//Parray指向一个含有10个整数的数组。即数组的指针
+   int (&arrRef)[10]=arr;//arrRef引用一个含有10个整数的数组
+   int *(&arry)[10]=ptrs;//arry是数组的引用，该数组含有10个指针
+   3.与vector和string一样，当我们需要遍历数组中所有的值时，最后使用范围for语句。即：
+   for(auto i:array)
+   {
+     cout<<i<<endl;
+   }
+3.5.3
