@@ -117,4 +117,9 @@
      cout<<i<<endl;
    }
 3.5.3 指针和数组
-   1.
+   1.数组元素的指针也是迭代器。如：
+   int arr[]={0,1,2,3,4,5};
+   int *p=arr;
+   ++p;//p指向arr[1]
+   2.C++11新特性，标准库函数begin,end。将数组作为他们的参数。即int *last=end(arr),
+   定义在iterator头文件中。
