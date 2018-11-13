@@ -61,3 +61,17 @@
    1.对于此语句：int val=3.433+3;此时会进行隐式转换，C++中的隐式转换尽量会避免精度的损
    失，所以表达式右边算出来的值是double型的，但是接下来的初始化，将double型的转换为了
    int型。
+   2.cast-name<type>(expression)是显式转换的式子。其中cast-name有四种类型：static_
+   cast,dynamic_cast,const_cast,reinterpret_cast。其中static_cast只要类型转换具有
+   明确定义并且不包含底层的const都可以使用。可以用它找回存在与void*中的值。如：
+   void *p=&d;
+   double *dp=static_cast<double*>(p);但是必须要保证转换后的类型就是指针所指的类型。
+   const_cast只能改变运算对象的底层const。即将常量对象转换为非常量对象，如下：
+   const char *pc;
+   char *p=const_cast<char*>(pc);//这是正确的，但是对p写值是未定义的行为
+   const_cast通常多数用于函数重载的上下文中。reinterpret_cast通常为运算对象的位模式
+   提供较低层次上的重新解释。所以reinterpret_cast本质上是依赖于机器，要想安全的使用它
+   必须涉及的类型以及编译器实现转换的过程非常的了解才行。
+   3.通常建议避免使用类型转换，因为强制类型转换干扰了正常的类型检查，特别是对于reinter
+   reinterpret_cast。也即不到必要的时候不使用强制类型转换，而每次使用都应该限制类型转
+   换值的作用域，并且应该对此记录。
