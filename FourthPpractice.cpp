@@ -13,3 +13,8 @@ p4.29
    这里有个问题，就是指针所占用的字节的大小，指针其实是地址，所以指针占用的空间的大小是
    由计算机的位数决定的，对于64位的计算机，那么指针所占用的空间大小为8个字节。而不是答案
    中的四个字节。
+p4.37
+   const string *ps;char *pc;void *pv;
+   (1)pv=(void*)ps可以改写成两种
+   a. pv=const_cast<string*>(ps);b. pv=static_cast<void*>(ps)
+   (2)i=int(*pc);可以改写为i=static_cast<int>(*pc)
