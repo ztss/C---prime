@@ -25,3 +25,12 @@ int main()
 	}
 	return 0;
 }
+//p6.8
+#ifndef FUNCTION_H
+#define FUNCTION_H
+
+
+int GetNum();
+int GetProduct(int n);
+
+#endif
