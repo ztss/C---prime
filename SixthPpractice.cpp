@@ -34,3 +34,24 @@ int GetNum();
 int GetProduct(int n);
 
 #endif
+//p6.10
+#include<iostream>
+#include<string>
+#include<vector>
+using namespace std;
+
+void changeNum(int *p1,int *p2)
+{
+	int temp=*p1;
+	*p1=*p2;
+	*p2=temp;
+}
+
+int main()
+{
+	int a=10;
+	int b=20;
+	changeNum(&a,&b);
+	cout<<a<<" "<<b<<endl;
+	return 0;
+}
