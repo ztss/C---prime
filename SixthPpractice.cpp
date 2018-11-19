@@ -103,3 +103,27 @@ void to_lower(string &s)
 
 //p6.19
 vector<int>::iterator chage_val(int i,vector<int>::iterator s);
+
+//p6.21
+#include<iostream>
+#include<vector>
+#include<string>
+#include<iterator>
+using namespace std;
+
+int get_maxnum(const int i,const int *j);
+
+int main()
+{
+	int i=10;
+	int h=100;
+	int *j=&h;
+	cout<<get_maxnum(i,j)<<endl;
+	return 0;
+}
+
+int get_maxnum(const int i,const int *j)
+{
+	int res=i>(*j)?i:*j;
+	return res;
+}
