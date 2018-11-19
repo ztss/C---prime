@@ -127,3 +127,31 @@ int get_maxnum(const int i,const int *j)
 	int res=i>(*j)?i:*j;
 	return res;
 }
+
+//p6.22
+#include<iostream>
+#include<vector>
+#include<string>
+#include<iterator>
+using namespace std;
+
+void change_pointer(int *&p1,int *&p2);
+
+int main()
+{
+	int i=10,j=5;
+	int *p1=&i;
+	int *p2=&j;
+	cout<<*p1<<" "<<*p2<<endl;
+	change_pointer(p1,p2);
+	cout<<*p1<<" "<<*p2<<endl;
+	return 0;
+}
+
+void change_pointer(int *&p1,int *&p2)
+{
+	int *temp;
+	temp=p1;
+	p1=p2;
+	p2=temp;
+}
