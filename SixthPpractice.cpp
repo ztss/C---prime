@@ -100,3 +100,6 @@ void to_lower(string &s)
 		i=tolower(i);
 	}
 }
+
+//p6.19
+vector<int>::iterator chage_val(int i,vector<int>::iterator s);
