@@ -170,4 +170,29 @@ int main(int argc,char *argv[])
 	}
 	cout<<endl;
 	return 0;
-} 
+}
+
+//p6.27
+#include<iostream>
+#include<vector>
+#include<string>
+#include<initializer_list>
+using namespace std;
+
+int get_sum(initializer_list<int> li);
+
+int main()
+{
+	cout<<get_sum({1,2,3,4,5,6,7})<<endl;
+	return 0;
+}
+
+int get_sum(initializer_list<int> li)
+{
+	int sum=0;
+	for(auto i:li)
+	{
+		sum+=i;
+	}
+	return sum;
+}
