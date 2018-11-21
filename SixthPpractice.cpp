@@ -155,3 +155,19 @@ void change_pointer(int *&p1,int *&p2)
 	p1=p2;
 	p2=temp;
 }
+
+//p6.25
+#include<iostream>
+#include<string>
+#include<vector>
+using namespace std;
+
+int main(int argc,char *argv[])
+{
+	for(int i=0;i<argc;i++)
+	{
+		cout<<argv[i]<<" "<<endl;
+	}
+	cout<<endl;
+	return 0;
+} 
