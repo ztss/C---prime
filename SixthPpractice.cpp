@@ -196,3 +196,28 @@ int get_sum(initializer_list<int> li)
 	}
 	return sum;
 }
+
+//p6.33
+#include<vector>
+#include<iostream>
+#include<string>
+using namespace std;
+
+void print(vector<int> vec,unsigned index);
+
+int main()
+{
+	vector<int> m={1,2,3,4,5,6,7,8};
+	print(m,0);
+	return 0;
+}
+
+void print(vector<int> vec,unsigned index)
+{
+	int length=vec.size();
+	if(index<length)
+	{
+		cout<<vec[index]<<endl;
+		print(vec,index+1);
+	}
+}
