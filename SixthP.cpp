@@ -109,3 +109,44 @@
    1.不要返回局部对象的引用或者指针。函数完成后，所占用的存储空间也会被释放掉。因此，函
    数终止意味着局部变量的引用将指向不再有效的内存区域。
    2.如果函数返回的是引用类型，并且不是常量引用，那么我们可以为函数的结果赋值。
+6.3.3 返回数组指针
+   1.数组不能被拷贝，所以函数不能返回数组。但是函数可以返回数组的指针或者引用。
+   2.声明一个返回数组指针的函数如右式所示 Type(*function(parameter_list))[dimension]
+   3.C++11有一个新标准，可以用尾置返回类型，即trailing return type。如下所示：
+   auto func(int i)->int(*)[10];//返回一个函数10个整数数组的指针
+6.4 函数重载
+   1.如果在同一个作用域，函数的名字相同但是形参列表不同，称这种为函数重载。但是main函数
+   不能重载。如果两个函数除了返回类型以外所有的要素都相同。这样是不行的。
+   2.顶层的const形参不影响传入函数的对象。一个有顶层const的形参无法和另外一个没有顶层
+   const的形参区分开来。如
+   Record lookup(phone*);
+   Record lookup(phone* const);//重复声明
+   但是另一方面，如果形参是某种类型的指针或者引用，那么可以通过区分其指向的是常量对象还
+   是非常量对象可以实现函数重载，此时的const是底层的。如下：
+   Record lookup(Account*);
+   Record lookup(const Account*);//作用与指向常量的指针
+   对于上面两个函数，由于常量对象不能转换为其他类型，所以只能把const对象传给const形参，
+   但是非常量可以转换为const,所以上面两个函数都可以传递入非const对象。而第一个函数不能
+   传入const对象。但是一般我们传递一个非常量对象的时候，编译器会优先选择非常量版本的函
+   数。
+   3.（const_cast的用法）我们之前讲过这样的函数：
+   const string &get_Shorter(const string &str1,const string &str2)
+   {
+     return str1.size>str2.size?str2:str1;
+   }
+   这个函数的参数以及返回类型都是const string的引用。根据上面我们的讨论，我们将两个非
+   常量的对象传入get_Shorter。，但是我们返回的结果却是const string的引用。所以我们需要
+   函数，当传递的参数为非常量的时候，得到的是普通的引用。这个时候我们可以使用const_cast
+   string get_Shorter(string &str1,string &str2)
+   {
+     auto &r=get_Shorter(const_cast<const string &>(str1),const_cast<const string &>(str2));
+     return const_cast<string &>(r);
+   }
+   上面这个函数首先将它传入的形参变为常量形式，然后调用get_shorter函数的const版本，这个
+   时候返回的是const string。但是给引用是绑定在了一个非常量的形参上面，所以最后再用
+   const_cast转换为普通的string&。
+   4.定义了一组重载函数之后，就可以根据通过传递合理的实参调用这些函数。函数匹配就是指的
+   这个过程，也可以叫做重载确定。一般这个过程都是很好确认的，但是当两个重载函数参数数量
+   相同并且可以相互转换的时候，这个就有点困难了。函数重载有三种结果：编译器找到一个匹配
+   的函数；编译器找不到匹配的函数；编译器找到多于一个重载函数，这个时候就会发生错误，称
+   为二义性调用(ambiguous call)。
