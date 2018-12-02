@@ -221,3 +221,21 @@ void print(vector<int> vec,unsigned index)
 		print(vec,index+1);
 	}
 }
+
+//p6.42
+#include<iostream>
+#include<string>
+#include<vector>
+using namespace std;
+
+string make_plural(string::size_type cnt,const string &character,const string &str="s")
+{
+	return cnt>1?character+str:character;
+}
+
+int main()
+{
+	string str1=make_plural(3,"word");
+	cout<<str1<<endl;
+	return 0;
+}
