@@ -239,3 +239,56 @@ int main()
 	cout<<str1<<endl;
 	return 0;
 }
+
+
+//p6.7
+#include<iostream>
+#include<vector>
+#include<string>
+
+int add(int a,int b);
+int Minus(int a,int b);
+int multi(int a,int b);
+int divide(int a,int b);
+
+using namespace std;
+
+int main()
+{
+	vector<decltype(add)*> Funv;
+	decltype(add)* fun1=add;
+	decltype(add)* fun2=Minus;
+	decltype(add)* fun3=multi;
+	decltype(add)* fun4=divide;
+	Funv.push_back(fun1);
+	Funv.push_back(fun2);
+	Funv.push_back(fun3);
+	Funv.push_back(fun4);
+	int a=10;
+	int b=2;
+	for(auto i:Funv)
+	{
+		cout<<i(a,b)<<endl;
+	}
+	return 0;
+}
+
+int add(int a,int b)
+{
+	return a+b;
+}
+
+int Minus(int a,int b)
+{
+	return a-b;
+}
+
+int multi(int a,int b)
+{
+	return a*b;
+}
+
+int divide(int a,int b)
+{
+	return a/b;
+}
