@@ -88,3 +88,70 @@ int main()
 	}
 	return 0;
 }
+//p8.13
+#include<iostream>
+#include<sstream>
+#include<fstream>
+#include<string>
+#include<vector>
+using namespace std;
+
+struct People
+{
+	string name;
+	vector<string> phones;
+};
+
+string format(const string& s)
+{
+	return s;
+}
+
+bool valid(const string& s)
+{
+	return true;
+}
+
+int main()
+{
+	ifstream input("text.txt");
+	vector<People> human;
+	string line, phone;
+	while(getline(input,line))
+	{
+		People temp;
+		istringstream record(line);
+		record >> temp.name;
+		while(record >> phone)
+		{
+			temp.phones.push_back(phone);
+		}
+		human.push_back(temp);
+	}
+	ostringstream os;
+	for(const auto& h:human)
+	{
+		ostringstream badnums,formatted;
+		for(const auto& p:h.phones)
+		{
+			if(!valid(p))
+			{
+				badnums << " " << p;
+			}
+			else
+			{
+				formatted << " " << format(p);
+			}
+		}
+		if(badnums.str().empty())
+		{
+			os << h.name << " " << formatted.str() << endl;
+		}
+		else
+		{
+			cerr << "input error: " << h.name << " invalid number(s) " << badnums.str() << endl;
+		}
+	}
+	cout << os.str() << endl;
+	return 0;
+}
