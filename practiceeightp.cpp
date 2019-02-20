@@ -60,3 +60,31 @@ int main()
 	}
 	return 0;
 }
+//p8.5
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<vector>
+using namespace std;
+
+
+
+int main()
+{
+	vector<string> str;
+	ifstream input("text.txt");
+	if(input)
+	{
+		string line;
+		while(input>>line)
+		{
+			str.push_back(line);
+		}
+		input.close();
+	}
+	for(auto i:str)
+	{
+		cout<<i<<endl;
+	}
+	return 0;
+}
