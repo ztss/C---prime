@@ -27,3 +27,17 @@
    at成员函数确保下标操作合法。即container.at(2)。如果越界，会抛出out_of_range异常。
 9.3.3 删除元素
 9.3.4 特殊的forward_list操作
+9.3.5 改变容器大小
+   1.可以用resize改变容器的大小。
+9.3.6 容器操作可能使迭代器失效
+9.4 vector对象是如何增长的
+   1.管理vector和string类型容量的成员函数，capacity(),可以保存多少元素，reserve(),
+   分配至少能容纳多个个元素的内存空间。
+9.5 额外的string操作
+9.5.1 构造string的其他方法
+9.5.2 改变string的其他方法
+9.5.3 string搜索操作
+9.5.4 compare函数
+9.5.5 数值转换
+9.6 容器适配器
+   1.容器适配器有stack，queue，priority_queue。
