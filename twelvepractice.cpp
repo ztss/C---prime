@@ -77,3 +77,25 @@ void StrBlob::pop_back()
 }
 
 #endif
+
+//此为main函数，测试StrBlob类
+#include <iostream>
+#include "STRBLOB.h"
+using namespace std;
+/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+
+int main() {
+	StrBlob b1;
+	{
+		StrBlob b2={"a","an","the"};
+		b1=b2;
+		b2.push_back("about");
+		cout << b2.size() << endl;
+	}
+	cout << b1.size() << endl;
+	cout << b1.front() << " " << b1.back() << endl;
+
+	const StrBlob b3=b1;
+	cout << b3.front() << " " << b3.back() << endl;
+	return 0;
+}
