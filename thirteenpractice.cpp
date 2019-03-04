@@ -220,3 +220,69 @@ int main()
 	cout << n.Get_String() << endl;
 	return 0;
 }
+
+
+//13.27
+#include<iostream>
+#include<vector>
+#include<string>
+using namespace std;
+
+class HasPtr{
+	public:
+		HasPtr(const string&s) : str(new string(s)),i(0),num(new size_t(1)) {};
+		HasPtr(const HasPtr&h) : str(h.str),i(h.i),num(h.num)
+		{
+			++*num;
+		}
+		HasPtr& operator=(const HasPtr &rhs);
+		const string& operator*();
+		size_t Get_No()
+		{
+			return *num;
+		}
+		~HasPtr();
+	private:
+		string *str;
+		int i;
+		size_t *num;
+};
+
+HasPtr& HasPtr::operator=(const HasPtr &rhs)
+{
+	++*rhs.num;
+	if(--*num==0)
+	{
+		delete str;
+		delete num;
+	}
+	str=rhs.str;
+	num=rhs.num;
+	i=rhs.i;
+	return *this;
+}
+
+const string& HasPtr::operator*()
+{
+	return *str;
+}
+
+HasPtr::~HasPtr()
+{
+	if(--*num==0)
+	{
+		delete str;
+		delete num;
+	}
+}
+
+int main()
+{
+	HasPtr z("hi,i am zhang");
+	HasPtr a(z);
+	HasPtr n=a;
+	cout << *z << " " << z.Get_No() << endl;
+	cout << *a << " " << a.Get_No() << endl;
+	cout << *n << " " << n.Get_No() << endl;
+	return 0;
+}
