@@ -78,3 +78,145 @@ void Fun2(X &x)
 {
 	cout << "Fun2" << endl;
 }
+
+
+//p13.17
+#include<memory>
+#include<vector>
+#include<iostream>
+using namespace std;
+
+struct numbered{
+	int mysn;
+	numbered(): mysn(0) {cout << "moren contruction func" << endl;}
+	numbered(const numbered &n)
+	{
+		cout << "copy construction func" << endl;
+		mysn=n.mysn+1;
+	}
+	numbered& operator=(const numbered &n)
+	{
+		cout << "copy==func" << endl;
+		mysn=n.mysn+1;
+		return *this;
+	}
+};
+
+void f(numbered s)
+{
+	cout << s.mysn << endl;
+}
+
+int main()
+{
+	numbered a,b=a,c=b;
+	f(a);
+	f(b);
+	f(c);
+	return 0;
+}
+
+
+//p13.18 13.19
+#include<iostream>
+#include<vector>
+#include<string>
+using namespace std;
+
+class Employee{
+	public:
+		Employee() : No(GetNo++),name("") { cout <<"default construction func" << endl; };
+		Employee(const string &str): No(GetNo++),name(str){cout << "construction func with a string" << endl; };
+		Employee(const Employee&e)//拷贝构造函数
+		{
+			No=GetNo++;
+			name=e.name;
+			cout << "copy construction func" << endl;
+		}
+		Employee& operator=(const Employee&e)//拷贝赋值函数
+		{
+			No=GetNo++;
+			name=e.name;
+			return *this;
+			cout << "copy assignment func" << endl;
+		}
+		const string& Get_Name()
+		{
+			return name;
+		}
+		int Get_No()
+		{
+			return No;
+		}
+	private:
+		static int GetNo;
+		int No;
+		string name;
+};
+
+int Employee::GetNo=0;
+
+void f(Employee &s)
+{
+	cout << s.Get_Name() << " " << s.Get_No() << endl;
+}
+
+int main()
+{
+	Employee a("a"),b=a,c;
+	cout << "hey im here" << endl;
+	c=b;
+	cout << "do this step" << endl;
+	f(a);
+	f(b);
+	f(c);
+	return 0;
+}
+
+//p13.22
+#include<string>
+#include<vector>
+#include<iostream>
+using namespace std;
+
+class HasPtr{
+	public:
+		HasPtr(const string &s): a(0),str(new string(s)) {};//默认构造函数
+		HasPtr(const HasPtr&h)//拷贝构造函数
+		{
+			a=h.a;
+			str=new string(*h.str);
+		}
+		HasPtr& operator=(const HasPtr&rhs);//拷贝赋值函数
+		~HasPtr()//析构函数
+		{
+			delete str;
+		}
+		const string& Get_String()
+		{
+			return *str;
+		}
+	private:
+		int a;
+		string *str;
+};
+
+inline HasPtr& HasPtr::operator=(const HasPtr&rhs)
+{
+	auto newstr=new string(*rhs.str);
+	delete str;
+	str=newstr;
+	a=rhs.a;
+	return *this;
+}
+
+int main()
+{
+	HasPtr z("hi zhangtao");
+	cout << z.Get_String() << endl;
+	HasPtr a(z);
+	cout << a.Get_String() << endl;
+	HasPtr n=z;
+	cout << n.Get_String() << endl;
+	return 0;
+}
