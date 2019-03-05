@@ -286,3 +286,91 @@ int main()
 	cout << *n << " " << n.Get_No() << endl;
 	return 0;
 }
+
+
+//13.30 13.31
+#include<string>
+#include<vector>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+class HasPtr{
+	friend void swap(HasPtr &lhs,HasPtr &rhs);
+	public:
+		HasPtr(const string &s): a(0),str(new string(s)) {};//默认构造函数
+		HasPtr(const HasPtr&h)//拷贝构造函数
+		{
+			a=h.a;
+			str=new string(*h.str);
+		}
+		HasPtr& operator=(const HasPtr&rhs);//拷贝赋值函数
+		HasPtr& operator=(const string &s);
+		bool operator<(const HasPtr &rhs) const;//不改变成员变量，所以定义为const。
+		~HasPtr()//析构函数
+		{
+			delete str;
+		}
+		const string& Get_String()
+		{
+			return *str;
+		}
+	private:
+		int a;
+		string *str;
+};
+
+inline HasPtr& HasPtr::operator=(const HasPtr&rhs)
+{
+	auto newstr=new string(*rhs.str);
+	delete str;
+	str=newstr;
+	a=rhs.a;
+	return *this;
+}
+
+inline HasPtr& HasPtr::operator=(const string &s)
+{
+	auto newstr=new string(s);
+	delete str;
+	str=newstr;
+	a=0;
+	return *this;
+}
+
+inline void swap(HasPtr &lhs,HasPtr &rhs)
+{
+	//using std::swap;
+	swap(lhs.str,rhs.str);
+	swap(lhs.a,rhs.a);
+}
+
+inline bool HasPtr::operator<(const HasPtr &rhs) const
+{
+	return *str<*rhs.str;
+}
+
+int main()
+{
+	vector<HasPtr> vh;
+	for(int i=9;i>=0;i--)
+	{
+		vh.push_back(to_string(i));
+	}
+	for(auto i:vh)
+	{
+		cout << i.Get_String() << endl;
+	}
+	sort(vh.begin(),vh.end());
+	for(auto i:vh)
+	{
+		cout << i.Get_String() << endl;
+	}
+	return 0;
+}
+
+
+//p13.32
+默认的swap版本简单的交换两个对象非静态成员，对于类指针的HasPtr来说就是交换了string指针
+引用计数指针，和整型值i。这是符合我们的期望的。所以，定义自己的swap版本并会比默认的做的
+更好。
