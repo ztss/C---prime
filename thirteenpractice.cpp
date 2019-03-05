@@ -374,3 +374,174 @@ int main()
 默认的swap版本简单的交换两个对象非静态成员，对于类指针的HasPtr来说就是交换了string指针
 引用计数指针，和整型值i。这是符合我们的期望的。所以，定义自己的swap版本并会比默认的做的
 更好。
+
+
+//p13.34 13.36 13.37
+#ifndef MESSAGE_H
+#define MESSAGE_H
+#include<iostream>
+#include<vector>
+#include<string>
+using namespace std;
+
+class Folder;
+class Message{
+	friend class Folder;
+	friend void swap(Message &lhs,Message &rhs);
+	public:
+		//folder被隐式的初始化为空集合
+		explicit Message(const string &s="") : contents(s) {}//默认构造函数
+		//拷贝控制函数
+		Message(const Message&);
+		Message& operator=(const Message&);
+		~Message();
+		void save(Folder &);//从给定的Folder集合中添加一个message
+		void remove(Folder &);//从给定的Folder集合中删除一个message
+		void addFldr(Folder *f)
+		{
+			folders.insert(f);
+		}
+		void remFldr(Folder *f)
+		{
+			folders.erase(f);
+		}
+	private:
+		string contents;
+		set<Folder*> folders;//包含本message的folder指针
+		//拷贝构造函数，拷贝赋值函数和析构函数所使用的工具函数
+		//将本message添加到指向参数的Folder中
+		void add_to_Folders(const Message&);
+		void remove_from_Folders();
+};
+
+void Message::save(Folder &f)
+{
+	folders.insert(&f);
+	f.addMsg(this);
+}
+
+void Message::remove(Folder &f)
+{
+	folders.erase(&f);
+	f.remMsg(this);
+}
+
+//将本message添加到指向m的Folder中
+void Message::add_to_Folders(const Message &m)
+{
+	for(auto i:m.folders)
+	{
+		i->addMsg(this);
+	}
+}
+
+Message::Message(const Message&m)
+{
+	contents=m.contents;
+	add_to_folders(m);
+}
+
+void Message::remove_from_Folders()
+{
+	for(auto i:folders)
+	{
+		i->remMsg(this);
+	}
+}
+
+Message::~Message()
+{
+	remove_from_Folders();
+}
+
+Message& Message::operator=(const Message &m)
+{
+	remove_from_Folders();//首先将左值的消息从所以序列中删除
+	contents=m.contents;
+	folders=m.folders;
+	add_to_Folders(rhs);//将本message添加到那些folder中
+	return *this;
+}
+
+inline void swap(Message &lhs,Message &rhs)
+{
+	using std::swap;
+	for(auto i:lhs.folders)
+	{
+		i->remMsg(&lhs);
+	}
+	for(auto i:rhs.folders)
+	{
+		i->remMsg(&rhs);
+	}
+	swap(lhs.contents,rhs.contents);
+	swap(lhs.folders,rhs.folders);
+	for(auto i:lhs.folders)
+	{
+		i->addMsg(&lhs);
+	}
+	for(auto i:rhs.folders)
+	{
+		i->addMsg(&rhs);
+	}
+}
+
+class Folder{
+	public:
+		Folder(const Folder&);
+		Folder& operator=(const Folder&);
+		~Folder();
+		void addMsg(Message *m);
+		void remMsg(Message *m);
+	private:
+		set<*Message> messages;
+		void add_to_messages(const Folder &);//将这个folder添加到所有的message中
+		void remove_from_messages();
+};
+
+inline void Folder::addMsg(Message *m)
+{
+	messages.insert(m);
+}
+
+inline void Folder::remMsg(Message &m)
+{
+	messages.erase(m);
+}
+
+inline void Folder::add_to_messages(Folder &f)
+{
+	for(auto m:f.messages)
+	{
+		m->addFldr(this);
+	}
+}
+
+inline void Folder::remove_from_messages()
+{
+	while(!messages.empty())
+	{
+		(*messages.begin())->remove(*this);
+	}
+}
+
+Folder::Folder(const Folder&f)
+{
+	messages=f.messages;
+	add_to_messages(*this);
+}
+
+Folder::~Folder()
+{
+	remove_from_messages();
+}
+
+Folder& Folder::operator=(const Folder &f)
+{
+	remove_from_messages();
+	messages=f.messages;
+	add_to_messages(f);
+	return *this;
+}
+
+#endif
