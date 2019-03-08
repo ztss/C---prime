@@ -87,3 +87,11 @@
    1.拷贝赋值运算符通常执行拷贝构造函数和析构函数中也要做的工作。这种情况下，公共的工作
    应该放在private的工具函数中完成。
 13.5 动态内存管理
+   1.如下函数：
+   pair<string*,string*> StrVec::alloc_n_copy(const string *b,const string *e)
+   {
+     auto data=alloc.allocate(e-b);
+     return {data,uninitialized_copy(b,e,data)};
+   }
+   上述语句分配b到e之间的空间，并且放回分配空间的起始地址。然后uninitialized_copy对分
+   配空间进行初始化。并且返回分配空间的最后一个值。
