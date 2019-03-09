@@ -681,6 +681,10 @@ void StrVec::reallocate()
 	cap=element+newcapacity;
 }
 
-
-
 #endif
+
+
+//p13.43
+for_each(element,first_free,[](string &s){alloc.destroy(&s);});
+for_each在algorithm头文件中，其中第一第二个参数为一个迭代器的首尾，然后第三个参数为一个
+unary function，这个function可以用lambda表达式代替。
