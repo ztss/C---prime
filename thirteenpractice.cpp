@@ -545,3 +545,142 @@ Folder& Folder::operator=(const Folder &f)
 }
 
 #endif
+
+//p13.39 13.40
+#ifndef STRVEC_H
+#define STRVEC_H
+#include<iostream>
+#include<vector>
+#include<string>
+#include<memory>
+#include<utility>
+using namespace std;
+
+class StrVec{
+	public:
+		StrVec();
+		StrVec(initializer<string>);
+		StrVec(const StrVec&);
+		Strvec& operator=(const StrVec&);
+		~StrVec();
+		size_t get_size() const;
+		size_t get_cap() const;
+		string* begin() const;
+		string* end() const;
+		void push_back(const string&);//拷贝元素
+	private:
+		static allocator<string> alloc;
+		string* element;
+		string* first_free;
+		string* cap;
+		void free();
+		pair<string*,string*> alloc_n_copy(const string*,const string*);
+		void reallocate();
+		void chk_n_alloc();
+};
+
+inline size_t StrVec::get_size() const
+{
+	return first_free-element;
+}
+
+inline size_t StrVec::get_cap() const
+{
+	return cap-element;
+}
+
+inline string* StrVec::begin() const
+{
+	return element;
+}
+
+inline string* StrVec::end() const
+{
+	return first_free;
+}
+
+inline void StrVec::chk_n_alloc()
+{
+	if(first_free==cap)
+	{
+		reallocate();
+	}
+}
+
+inline StrVec::StrVec(inilializer<string> is)
+{
+	auto newdata=alloc_n_copy(is.begin(),is.end());
+	element=newdata.first();
+	first_free=cap=newdata.second;
+}
+
+void StrVec::push_back(const string& str)
+{
+	chk_n_alloc();
+	alloc.construct(first_free++,str);
+}
+
+pair<string*,string*> StrVec::alloc_n_copy(const string *b,const string *e)
+{
+     auto data=alloc.allocate(e-b);
+     return {data,uninitialized_copy(b,e,data)};
+}
+
+void StrVec::free()
+{
+	if(element)
+	{
+		//逆序销毁元素
+		for(auto p=first_free;p!=element;)
+		{
+			alloc.destroy(--p);
+		}
+		alloc.deallocate(elements,caps-elements);
+	}
+}
+
+StrVec::StrVec(const StrVec &s)
+{
+	auto newdata=alloc_n_copy(s.begin(),s.end());
+	elements=newdata.first;
+	first_free=cap=newdata.second;
+}
+
+StrVec::~StrVec()
+{
+	free();
+}
+
+StrVec& StrVec::operator=(const StrVec &rhs)
+{
+	auto data=alloc_n_copy(rhs.begin(),rhs.end());
+	free();
+	elements=data.first;
+	first_free=caps=data.second;
+	return *this;
+}
+
+void StrVec::reallocate()
+{
+	auto newcapacity=size()?2*size():1;
+	//分配新内存,返回分配内存的首地址
+	auto newdata=alloc.allocate(newcapacity);
+	auto dest=newdta;
+	//指向旧数据的首地址
+	auto elem=elements;
+	//将旧数组的数据移动到新分配的空间中
+	for(size_t i=0;i!=size();i++)
+	{
+		//在新内存构造使用构造函数，其中第一个参数是目标内存的第一个位置，第二个参数是move函数
+		//的返回值，即string的移动构造函数，将旧内存的内容直接移动到新内存，可以节省很多时间
+		alloc.construct(dest++,std::move(*elem++));
+	}
+	free();
+	element=newdata;
+	first_free=dest;
+	cap=element+newcapacity;
+}
+
+
+
+#endif
