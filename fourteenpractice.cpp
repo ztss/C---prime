@@ -48,3 +48,70 @@ int main()
 	cout << vs.size() << endl;
 	return 0;
 }
+
+//p14.38
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+class Equalen{
+	public:
+		Equalen(size_t sz) : sz(sz){}
+		bool operator()(const string &str)
+		{
+			return str.size()==sz;
+		}
+	private:
+		size_t sz;
+};
+
+int main()
+{
+	vector<string> vs;
+	while(true)
+	{
+		string line;
+		cin >> line;
+		if(line.empty())
+		{
+			break;
+		}
+		else
+		{
+			vs.push_back(line);
+		}
+	}
+	for(size_t i=1;i<=10;i++)
+	{
+		cout << count_if(vs.begin(),vs.end(),Equalen(i)) << " ";
+	}
+	cout << endl;
+	return 0;
+}
+
+//p14.43
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<functional>
+using namespace std;
+
+
+
+int main()
+{
+	int size=3;
+	vector<int> vi;
+	vi={3,6,9};
+	int count=count_if(vi.begin(),vi.end(),bind2nd(modulus<int>(),size));
+	if(count==0)
+	{
+		cout << "Yes" << endl;
+	}
+	else
+	{
+		cout << "No" << endl;
+	}
+	return 0;
+}
