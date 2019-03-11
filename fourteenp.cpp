@@ -60,3 +60,35 @@
      StrBlobPtr operator--(int);
    };其中后置版本应该返回对象的原值，而不是引用。但是需要移动指针。
 14.7 成员访问运算符
+   1.在迭代器类和智能指针类中需要用到解引用*运算符和箭头->运算符。如下。
+   class StrBlobPtr{
+   public:
+     string& operator*() const
+     {
+       auto p=check(curr,"dereference past end");
+       return (*p)[curr];
+     }
+     string* operator->() const
+     {
+       return & this->operator*();
+     }
+   };
+   2.重载的箭头运算符必须返回类的指针或者自定义了箭头运算符的某个类的对象。
+14.8 函数调用运算符
+   1.函数调用运算符必须是成员函数。自定义了函数调用运算符的类称为函数对象。如下
+   class PrintString{
+   public:
+     PrintString(ostream& o=cout,char c=' '): os(o),sep(c){}
+     void operator()(const string& str) const
+     {
+       os << str <<sep;
+     }
+   private:
+     ostream& os;
+     char sep;
+   };
+   我们可以这样使用
+   PrintString ps;
+   ps(s);//在cout中打印s,后面跟一个空格。
+   函数对象通常作为泛型算法的实参。如
+   for_each(vs.begin(),vs.end(),PrintString(cerr,'\n'));
