@@ -16,4 +16,10 @@
      return 0;
    }
    2.在模板定义内，模板非类型参数是一个常量值。在需要常量表达式的地方，可以使用非类型参
-   数。例如，指定数组大小。
+   数。例如，指定数组大小。如下
+   template<unsigned N,unsigned M>
+   int compare(const char (&p1)[N],const char (&p2)[M])
+   {
+     return strcmp(p1,p2);
+   }
+   3.模板程序应该尽量减少对实参类型的要求。
