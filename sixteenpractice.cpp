@@ -287,3 +287,59 @@ int main()
 	PRint(squares);
 	return 0;
 }
+
+
+//p16.28
+#ifndef SP_H
+#define SP_H
+#include<iostream>
+using namespace std;
+
+
+template<typename T>
+class Shared_Ptr{
+	public:
+		Shared_Ptr() : t(nullptr),use(0) {}
+		Shared_Ptr(const T* ptr) : t(ptr),use(new size_t(1)) {}
+
+		//copy cons
+		Shared_Ptr(const Shared_Ptr<T>& sp) : t(sp.t),use(sp.use) {
+			++*use;
+		}
+
+		//recon * symbol
+		T operator*() const{
+			return *t;
+		}
+
+		//copy assignment
+		Shared_Ptr<T>& operator=(const Shared_Ptr<T>& rhs){
+			++*rhs.use;
+			decrement_and_destroy();
+			t=rhs.t;
+			use=rhs.use;
+			return *this;
+		}
+
+		//Delete cons
+		~Shared_Ptr(){
+			decrement_and_destroy();
+		}
+	private:
+		T* t;
+		size_t* use;
+		auto decrement_and_destroy(){
+			if(t&&--*use==0){
+				delete use;
+				delete t;
+			}
+			else if(!t){
+				delete t;
+			}
+			t=nullptr;
+			use=nullptr;
+		}
+};
+
+
+#endif
