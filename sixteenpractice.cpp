@@ -249,3 +249,41 @@ int main()
 	Blob<int> squares={0,1,2,3,4,5,6,7,8,9};
 	return 0;
 }
+
+
+//p16.19 p16.20
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<memory>
+#include<list>
+#include<vector>
+using namespace std;
+
+template<typename T>
+void Print(const T& t)
+{
+	for(typename T::size_type i=0;i<t.size();i++)
+	{
+		cout << t[i] << " ";
+	}
+	cout << endl;
+}
+
+template<typename T>
+void PRint(const T& t)
+{
+	for(auto iter=t.begin();iter!=t.end();iter++)
+	{
+		cout << *iter << " ";
+	}
+	cout << endl;
+}
+
+int main()
+{
+	vector<int> squares={0,1,2,3,4,5,6,7,8,9};
+	Print(squares);
+	PRint(squares);
+	return 0;
+}
