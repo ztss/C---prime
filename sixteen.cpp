@@ -58,4 +58,34 @@
 16.1.4 成员模板
    1.一个类可以包含本身是模板的成员函数。这种成员叫做成员模板。成员模板不能是虚函数。
 16.1.5 控制实例化
-16.1.6
+16.1.6 效率与灵活性
+16.2 模板实参推断
+16.2.1 类型转换与模板类型参数
+   1.只有有限的集中类型转换会应用于模板函数形参，因为编译器通常不是对实参进行类型转换，
+   而是生成一个新的模板实例。如const转换和数组或函数到指针的转换可以应用于模板函数形参
+   类型转换。其他的如算术转换，派生类向基类的转换以及用户定义的转换都不能应用于函数模板。
+16.2.2 函数模板显式形参
+16.2.3 尾置返回类型与类型转换
+   1.如下：
+   template<typename T>
+   auto fcn(T beg,T end)->decltype(*beg)
+   {
+     return *beg;
+   }
+   2.有些时候我们无法直接获得所需要的类型，比如说我们可以能编写一个类似如上的函数，但是
+   我们不是需要引用，而是元素的值。我们可以使用头文件<type_traits>。如下：
+   remove_reference<decltype(*beg)>::type。所以上述函数可以改写如下：
+   template<typename T>
+   auto fcn(T beg,T end)->remove_reference<decltype(*beg)>::typedef{
+     retrun *beg;
+   }
+   此函数返回一个元素的拷贝。
+16.2.4 函数指针和实参推断
+   1.当参数是一个函数模板实例的地址的时候，程序的上下文必须满足，对于每个模板参数，能唯
+   一确定其类型或值。如下
+   template<typenam T> int compare(const T&,const T&)
+   void func(int(*)(const string&,const string&));//这是一个函数，其实参是函数指针
+   void func(int(*)(const T&,const T&));
+   func(compare);//error
+   func(compare<int>)
+16.2.5 模板实参推断和引用
