@@ -346,3 +346,27 @@ class Shared_Ptr{
 
 //p16.33
 如果函数形参不是引用类型，那么数组和函数类型的实参就可以转换为指针类型。
+
+//p16.41
+#include<vector>
+#include<iostream>
+#include<memory>
+#include<algorithm>
+using namespace std;
+
+template<typename T1,typename T2>
+auto sum(T1 a,T2 b)->decltype(a+b)
+{
+	return a+b;
+}
+
+int main()
+{
+	auto a=sum(1,1);
+	cout << a << " " << sizeof(a) << endl;
+	auto b=sum(1,1.1);
+	cout << b << " " << sizeof(b) << endl;
+	auto c=sum(1,1.1f);
+	cout << c << " " << sizeof(c) << endl;
+	return 0;
+}
