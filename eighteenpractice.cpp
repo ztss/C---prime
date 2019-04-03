@@ -26,3 +26,65 @@
    1.命名空间为防止名字冲突提供了更加可控的机制。命名空间分割了全局命名空间，其中每个命
    名空间是一个作用域。通过在某个命名空间中定义库的名字，库的作者以及用户可以避免全局名
    字固有的限制。
+18.2.1 命名空间定义
+   1.如下，定义了一个命名空间
+   namespace cplusplus_prime{
+     class Sales_data{};
+     ....
+     ....
+   }
+   其中，只要能出现在全局作用域的声明就能置于命名空间内。
+   2.每个命名空间都是一个作用域。
+   3.命名空间可以是不连续的。命名空间的一部分成员的作用是定义类，以及声明作为类接口的函
+   数及对象。则这些成员应该置于头文件中，这些头文件被包含在使用了这些成员的文件中。命名
+   空间成员的定义部分则置于另外的源文件中。
+   4.我们可以将我们的cplusplus_primer库定义在几个不同的文件中。如
+   //Sales_data.h
+   #include<string>
+   namespace cplusplus_prime{
+     class Sales_data{};
+     Sales_data operator+(const Sales_data&,const Sales_data&);//声明
+   }
+   //Sales_data.cc
+   #incldue "Sales_data.h"
+   namespace cplusplus_prime{
+     //Sales_data成员及重载运算符的定义
+   }
+   如果想使用我们定义的库，必须包含必要的头文件。如
+   // user.cc
+   #include "Sales_data.h"
+
+   int main()
+   {
+     using cplusplus_prime::Sales_data;
+     //
+     return 0;
+   }
+   命名空间可以只包含声明，而定义可以在外部空间中。只要包含完整的前缀即可。
+   4.C++11引入了一种新的嵌套命名空间，称为内联命名空间，直接在namespace前面加inline就
+   可以了。如下
+   inline namespace FifthEd{
+     //第五版代码
+   }
+   inline只要写在命名空间第一次定义的地方就可以了。在一个库的代码发生了改变的时候，就使
+   用内联命名空间。
+   namespace cplusplus_prime{
+     #include "FifthEd.h"
+     #include "FourthEd.h"
+   }
+   那么我们cplusplus_primer::直接获得内敛的第五版里面的成员。而想使用其他嵌套命名空间
+   则需要cplusplus_primer::FourthEd::
+   4.未命名的命名空间只在特定的文件内部有效，其作用范围不会横跨多个不同的文件。
+   5.未命名的命名空间取代文件中的静态声明。在文件中进行静态声明的做法以及被C++标准取消
+   了，现在的做法是使用未命名的命名空间。
+18.2.2 使用命名空间成员
+   1.可以使用命名空间的别名 namespace primer=cplusplus_prime;
+   2.using声明语句一次只引入命名空间的一个成员，可以出现在类的作用域中。而using指示的形
+   式是 using namespace +命名空间名字。它可以使用命名空间中的所有名字。它不能出现在类
+   的作用域中。
+   3.我们应该避免使用using指示，在程序中对命名空间的每个成员分别使用using声明效果更好，
+   可以减少注入到命名空间中的名字数量。using声明引起的二义性问题在声明处就能被发现。是
+   很有益处的。但是我们在命名空间本身的实现文件中就可以使用using指示。
+18.2.3 类，命名空间与作用域
+18.2.4 重载与命名空间
+   1.如果存在多个using指示，则来自每个命名空间的名字都会成为候选函数集的一部分。
