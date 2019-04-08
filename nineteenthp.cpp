@@ -58,3 +58,53 @@
        //处理转化失败的情况
      }
    }
+19.2.2 typeid运算符
+   1.我们这样使用typeid运算符
+   Derived *dp=new Derived;
+   Base *bp=dp;//两个指针都指向derived对象
+   if(typeid(*bp)==typeid(*dp)){
+     //
+   }
+   //检查运行时类型是否是某种指定的类型
+   if(typeid(*bp)==typeid(Derived))
+   {
+
+   }
+   2.当typeid作用与指针时(而不是指针所指的对象)，返回的结果是该指针的静态编译时类型。
+19.2.3 使用RTTI
+   1.我们使用在类中具有继承关系的类实现相等运算符来说明如何使用RTTI。如下，先定义类
+   class Base{
+     friend bool operator==(const Base&,const Base&);
+   public:
+     //Base的接口成员
+   protected:
+     virtual bool equal(const Base&) const;
+     //Base的数据成员和其他用于实现的成员
+   };
+   class Derived: public Base{
+   public:
+   protected:
+     bool equal(const Base&) const;
+
+   };
+   然后定义相等运算符，先比较两个运算对象的类型是否相同，然后再调用equal函数比较两个运算
+   对象
+   bool operator==(const Base& lhs,const Base& rhs){
+     return typeid(lhs)==typeid(rhs)&&lhs.equal(rhs);
+   }
+   然后每个继承体系中的每个类都必须定义自己的equal函数。派生类的所有函数做的第一件事就
+   是将实参的类型转换为派生类类型
+   bool Derived::equal(const Base &rhs) const{
+     //我们清楚这两个类型是相同的，所有转换过程不会抛出异常
+     auto r=dynamic_cast<const Derived&>(rhs);
+     //执行比较两个Derived对象的操作并且返回结果
+   }
+   而基类的equal函数则不需要转换形参的类型
+   bool Base::equal(const Base& rhs) const{
+     //执行比较Base对象的操作
+   }
+19.2.4 type_info类
+19.3 枚举类型
+   1.C++11新标准引入了限定作用域的枚举类型。
+19.4 类成员指针
+   1.成员指针是指可以指向类的非静态成员的指针。
