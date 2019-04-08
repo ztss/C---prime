@@ -108,3 +108,60 @@
    1.C++11新标准引入了限定作用域的枚举类型。
 19.4 类成员指针
    1.成员指针是指可以指向类的非静态成员的指针。
+19.4.1 数据成员指针
+   1.可以这样定义数据成员指针 auto pdata=&screen::contents;screen是一个类。
+   2.我们可以这样使用数据成员指针
+   screen myscreen, *pscreen=&myscreen;
+   auto s=myscreen.*pdata;
+   s=pscreen->*pdata;
+   3.因为数据成员一般情况是私有的，所以我们通常不能直接获得数据成员的指针。如果一个像
+   screen这样的类希望我们可以访问它的contents成员，最好定义一个函数。令其返回的值是指
+   向该成员的指针。
+   class screen{
+   public:
+     static const std::string screen::*data(){
+       return &screen::contents;
+     }
+   };
+   可以知道data返回的是一个指向screen类的const string成员的指针。
+   const string screen::*pdata=screen::data();
+   pdata指向的是类的成员而不是实际的数据，要想使用pdata，必须将他绑定到screen类型的对象
+   上。
+   auto s=myscreen.*pdata;
+19.4.2 成员函数指针
+   1.我们可以使用auto来推断成员函数指针的类型，如下
+   auto pmf=&screen::get_cursor;
+   或者如下
+   char (screen::*pmf2)(screen::pos,screen::pos) const;
+   pmf2=&screen::get;
+   2.可以这样使用成员函数指针
+   char c2=(myscreen.*pmf2)(0,0);
+   3.我们可以将函数指针作为某个函数的返回类型或者形参类型。
+19.4.3 将成员函数用作可调用对象
+19.5 嵌套类
+   1.一个类可以定义在另一个类的内部，前者称为嵌套类或者嵌套类型。
+19.6 union:一种节省空间的类
+   1.union是一种特殊的类，一个union可以有多个数据成员，但是任意时刻只有一个数据成员可以
+   有值。
+   2.union的定义
+   union token{
+     char cval;
+     int ival;
+     double dval;
+   };
+19.7 局部类
+   1.类可以定义在某个函数的内部。这样的类我们称为局部类。
+   2.局部类的所有成员都必须完整的定义在类的内部，所以，局部类的作用与嵌套类相比相差很远。
+   3.局部类不能使用函数作用域中的变量
+19.8 固有的不可移植的特性
+   1.为了支持底层编程，C++定义了一些固有的不可移植的特性。
+19.8.1 位域
+   1.类可以将其非静态的数据成员定义为位域，每一个位域含有一定数量的二进制位。
+19.8.2 volatile限定符
+   1.valatile的确切含义与机器有关，只能通过阅读编译器文档来理解。
+   2.关键字volatile告诉编译器不应该对这样的对象进行优化。
+   3.合成的拷贝给对volatile对象无效。
+19.8.3 链接指示：extern "C"
+   1.C++使用链接指示指出任意非C++函数所用的语言。要想把C++代码和其他语言编写的代码放在
+   一起使用，要求我们必须有权访问该语言的编译器。并且这个编译器与当前的C++编译器是兼容的
+   。
